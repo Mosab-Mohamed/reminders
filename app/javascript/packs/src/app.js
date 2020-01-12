@@ -2,15 +2,15 @@ import React, { Component } from "react";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Homepage from "./features/homepage";
+import Reminders from "./features/reminders";
 
 class App extends Component {
   render() {
     return (
       <Router>
         <Switch>
-          <Route path="/">
-            <Homepage />
-          </Route>
+          <Route path="/reminders" render={props => <Reminders {...props} />} />
+          <Route path="/" render={props => <Homepage {...props} />} />
         </Switch>
       </Router>
     );
