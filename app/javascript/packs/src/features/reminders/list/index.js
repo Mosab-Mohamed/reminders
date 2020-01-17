@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { fetchAll as fetchAllReminders } from "../../../api/reminder";
 
-const RemindersList = props => {
-  const [reminders, setReminder] = useState([
-    {
-      title: "Test",
-      text: "Teeseeesst",
-      scheduledTime: new Date().toISOString(),
-      id: 1
-    }
-  ]);
+const RemindersList = ({ reminders, setReminders }) => {
+  useEffect(() => {
+    fetchAllReminders().then(response => {
+      setReminders(response.data.data.reminders);
+    });
+  }, [setReminders]);
 
   return (
     <>

@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import NewReminderForm from "./form";
 import RemindersList from "./list";
+import { create as createReminder } from "../../api/reminder";
 
 const Reminder = ({ match }) => {
+  const [reminders, setReminders] = useState([]);
+
   const handleSubmit = (event, values) => {
     event.preventDefault();
-    console.log({ values });
+    createReminder(values);
   };
 
   return (
@@ -23,7 +26,13 @@ const Reminder = ({ match }) => {
         <Route
           exact
           path={`${match.url}/`}
-          render={props => <RemindersList {...props} />}
+          render={props => (
+            <RemindersList
+              {...props}
+              reminders={reminders}
+              setReminders={setReminders}
+            />
+          )}
         />
       </Switch>
     </>
