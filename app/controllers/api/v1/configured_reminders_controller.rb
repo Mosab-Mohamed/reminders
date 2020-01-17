@@ -8,9 +8,10 @@ class Api::V1::ConfiguredRemindersController < Api::V1::BaseController
     end
 
     def create
-        @reminder = current_user.configured_reminders.new(reminder_params)
+        @reminder = user.configured_reminders.new(reminder_params)
         if !@reminder.save
             @message = @reminder.errors
+            render_unprocessable
         end
     end
 
@@ -24,13 +25,14 @@ class Api::V1::ConfiguredRemindersController < Api::V1::BaseController
         @reminder = user.configured_reminders.find params[:reminder_id]
         if !@reminder.update(reminder_params)
           @message = @reminder.errors
+          render_unprocessable
         end
     end
 
     private
 
     def reminder_params
-        params.require(:reminder).permit(:title, :text, :scheduledTime)
+        params.require(:reminder).permit(:title, :text, :scheduled_time)
     end
 end
   

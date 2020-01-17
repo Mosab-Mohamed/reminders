@@ -1,7 +1,9 @@
 import Axios from "axios";
 import { BASE_URL } from "../utils/constants/baseURL";
 
-const axios = Axios.create({ BASE_URL });
+const axios = Axios.create({
+  baseURL: BASE_URL
+});
 
 export const fetch = reminderId =>
   axios({
@@ -10,7 +12,7 @@ export const fetch = reminderId =>
 
 export const fetchAll = () =>
   axios({
-    url: "api/v1/reminders"
+    url: "reminders"
   });
 
 export const create = reminder =>
@@ -34,5 +36,5 @@ export const updateReminder = (reminderId, reminder) =>
 export const deleteReminder = reminderId =>
   axios({
     method: "delete",
-    url: `/reminder/${reminderId}`
+    url: `/reminders/${reminderId}`
   });

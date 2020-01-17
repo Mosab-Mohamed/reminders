@@ -1,16 +1,41 @@
 import React, { useState } from "react";
 
-import { Switch, Route } from "react-router-dom";
-import NewReminderForm from "./form";
+import { Switch, Route, useHistory } from "react-router-dom";
+import ReminderForm from "./form";
 import RemindersList from "./list";
-import { create as createReminder } from "../../api/reminder";
+import {
+  create as createReminder,
+  deleteReminder,
+  updateReminder
+} from "../../api/reminder";
 
-const Reminder = ({ match }) => {
+const Reminder = ({ match, url, location }) => {
   const [reminders, setReminders] = useState([]);
 
-  const handleSubmit = (event, values) => {
-    event.preventDefault();
-    createReminder(values);
+  const history = useHistory();
+
+  const handleSubmit = values => {
+    createReminder(values)
+      .then(() => history.push("/reminders"))
+      .catch(err => {
+        console.log({ err });
+      });
+  };
+
+  const handleEdit = (id, values) => {
+    updateReminder(id, values)
+      .then(() => history.push("/reminders"))
+      .catch(err => {
+        console.log({ err });
+      });
+  };
+
+  const handleDeleteReminder = id => {
+    deleteReminder(id)
+      .then(() =>
+        setReminders(prevReminders => prevReminders.filter(r => r.id !== id))
+      )
+      .catch(err => console.log({ err }));
   };
 
   return (
@@ -20,7 +45,18 @@ const Reminder = ({ match }) => {
           exact
           path={`${match.url}/new`}
           render={props => (
-            <NewReminderForm {...props} handleSubmit={handleSubmit} />
+            <ReminderForm {...props} handleSubmit={handleSubmit} />
+          )}
+        />
+        <Route
+          exact
+          path={`${match.url}/:id/edit`}
+          render={props => (
+            <ReminderForm
+              {...props}
+              handleSubmit={handleEdit}
+              reminder={location.state.reminder}
+            />
           )}
         />
         <Route
@@ -31,6 +67,7 @@ const Reminder = ({ match }) => {
               {...props}
               reminders={reminders}
               setReminders={setReminders}
+              deleteReminder={handleDeleteReminder}
             />
           )}
         />
