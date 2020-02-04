@@ -10,7 +10,7 @@ class App extends Component {
       <Router>
         <Switch>
           <Route path="/reminders" render={props => <Reminders {...props} />} />
-          <Route path="/" render={props => <Homepage {...props} />} />
+          <Route path="/" render={props => <Reminders {...props} />} />
         </Switch>
       </Router>
     );
